@@ -32,7 +32,7 @@ bool linkedListMerge(struct Node* AHead, struct Node* BHead)
     return true;
 }
 
-bool linkedListMergeifTail(struct Node* ATail, struct Node* BTail)
+bool linkedListMergeIfTail(struct Node* ATail, struct Node* BTail)
 {
     if (ATail == NULL || BTail == NULL) {
         return false;

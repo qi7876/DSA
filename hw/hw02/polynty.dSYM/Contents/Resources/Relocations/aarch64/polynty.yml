@@ -1,0 +1,5 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     '/Users/qi7876/projects/DSA/hw/hw02/polynty'
+relocations:     []
+...
