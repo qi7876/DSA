@@ -108,11 +108,7 @@ int main(int argc, char* argv[])
     createAndSortPoly(polyHeadB);
 }
 
-/*
- * Function: Initialize the head node for polynomial.
- * Arguments: void
- * Return: The pointer of head node
- */
+// Initialize the head node for polynomial.
 polyNode* initPoly(void)
 {
     polyNode* polyHead = (polyNode*)malloc(sizeof(polyNode));
@@ -124,11 +120,7 @@ polyNode* initPoly(void)
     return polyHead;
 }
 
-/*
- * Function: Process the string received by fgets. Replace "\n" with "\0".
- * Arguments: string pointer
- * Return: void
- */
+// Process the string received by fgets. Replace "\n" with "\0".
 void trimNewline(char* str)
 {
     size_t len = strlen(str);
@@ -137,11 +129,7 @@ void trimNewline(char* str)
     }
 }
 
-/*
- * Function: Process the string. Captical case to lower case.
- * Arguments: string pointer
- * Return: void
- */
+// Process the string. Captical case to lower case.
 void toLowerCase(char* str)
 {
     for (; *str; ++str) {
@@ -149,12 +137,8 @@ void toLowerCase(char* str)
     }
 }
 
-/*
- * Function: Get and process the user input. Check whether the user’s input is a number or ‘quit’.
- *           If the input is invalid, ask the user to enter it again.
- * Arguments: void
- * Return: The pointer of structure inputResult
- */
+// Function: Get and process the user input. Check whether the user’s input is a number or ‘quit’.
+//           If the input is invalid, ask the user to enter it again.
 inputResult* inputProcess(void)
 {
     char input[MAX_INPUT_SIZE];
@@ -197,11 +181,7 @@ inputResult* inputProcess(void)
     return inputReturn;
 }
 
-/*
- * Function: Add prompt and loop for function: inputProcess.
- * Arguments: int mode: 1 for exponent, 2 for coefficient
- * Return: The pointer of structure inputResult
- */
+// Add prompt and loop for function: inputProcess.
 inputResult* inputRead(int mode)
 {
     int exp;
@@ -229,11 +209,7 @@ inputResult* inputRead(int mode)
     return inputReturn;
 }
 
-/*
- * Function: find whether the input exponent is already exsited in polynomial.
- * Arugments: polyHead, the length of polynomial, the value of exponent
- * Return: pointer of the polynomial node whose exponent is equal to parameter.
- */
+// find whether the input exponent is already exsited in polynomial.
 polyNode* findExponent(polyNode* polyHead, int length, int exponent)
 {
     polyNode* currentNode = polyHead->next;
@@ -261,11 +237,8 @@ void deletePolyList(polyNode* polyHead)
 
     polyHead->next = NULL;
 }
-/*
- * Function: Create a new polynomial linked list.
- * Arguments: the pointer of head node
- * Return: the pointer of head node
- */
+
+// Create a new polynomial linked list.
 polyNode* createPoly(polyNode* polyHead)
 {
     int exp;
