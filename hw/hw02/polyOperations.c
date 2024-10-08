@@ -486,11 +486,20 @@ void polyOperation(polyNode* polyHeadA, polyNode* polyHeadB, int isSubtraction)
             bPrevNode->next = aCurrentNode;
             aPrevNode->next = bPrevNode;
             aPrevNode = aPrevNode->next;
+            if (isSubtraction == 1) {
+                aPrevNode->coef = 0 - aPrevNode->coef;
+            }
         }
     }
 
     if (aCurrentNode == NULL) {
         aPrevNode->next = bCurrentNode;
+        if (isSubtraction == 1) {
+            while (bCurrentNode != NULL) {
+                bCurrentNode->coef = 0 - bCurrentNode->coef;
+                bCurrentNode = bCurrentNode->next;
+            }
+        }
     }
 
     polyHeadB->next = NULL;
