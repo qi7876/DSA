@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MAX_INPUT_SIZE 100
+#define MAX_INPUT_SIZE 100000
 #define EPSILON 1e-6
 
 // Define the node structure for polynomial.
@@ -24,6 +24,7 @@ typedef struct inputResult {
 } inputResult;
 
 polyNode* initPoly(void);
+void polyMul(polyNode* polyHeadA, polyNode* polyHeadB);
 void trimNewline(char* str);
 void toLowerCase(char* str);
 inputResult* inputProcess(void);
@@ -41,8 +42,9 @@ void option3Menu(void);
 void deletePolyList(polyNode* polyHead);
 void clearBuffer(void);
 void polyOperation(polyNode* polyHeadA, polyNode* polyHeadB, int isSubtraction);
+void polyValue(polyNode* polyHeadA, polyNode* polyHeadB);
 
-int main(int argc, char* argv[])
+int main()
 {
     int inputOption;
     polyNode *polyHeadA, *polyHeadB;
@@ -91,6 +93,11 @@ int main(int argc, char* argv[])
                 polyOperation(polyHeadA, polyHeadB, 1);
                 printPoly(polyHeadA);
                 break;
+            case 3:
+                printf("\n===========Multiplication Result===========\n");
+                polyMul(polyHeadA, polyHeadB);
+                break;
+                break;
             default:
                 printf("\nInvalid input!\n");
                 break;
@@ -123,7 +130,7 @@ polyNode* initPoly(void)
 // Process the string received by fgets. Replace "\n" with "\0".
 void trimNewline(char* str)
 {
-    size_t len = strlen(str);
+    int len = strlen(str);
     if (len > 0 && str[len - 1] == '\n') {
         str[len - 1] = '\0';
     }
@@ -184,7 +191,6 @@ inputResult* inputProcess(void)
 // Add prompt and loop for function: inputProcess.
 inputResult* inputRead(int mode)
 {
-    int exp;
     inputResult* old;
     inputResult* inputReturn = (inputResult*)malloc(sizeof(inputResult));
 
@@ -213,7 +219,8 @@ inputResult* inputRead(int mode)
 polyNode* findExponent(polyNode* polyHead, int length, int exponent)
 {
     polyNode* currentNode = polyHead->next;
-    for (int i = 1; i <= length; i++) {
+    int i;
+    for (i = 1; i <= length; i++) {
         if (currentNode->exp == exponent) {
             return currentNode;
         }
@@ -241,8 +248,6 @@ void deletePolyList(polyNode* polyHead)
 // Create a new polynomial linked list.
 polyNode* createPoly(polyNode* polyHead)
 {
-    int exp;
-    float coef;
     polyNode* currentNode = NULL;
     polyNode* prevNode = polyHead;
     inputResult* old;
@@ -267,7 +272,8 @@ polyNode* createPoly(polyNode* polyHead)
 
         // i = 1 for exponent
         // i = 0 for coefficient
-        for (int i = 1; i > -1; i--) {
+        int i;
+        for (i = 1; i > -1; i--) {
             old = inputReturn;
             inputReturn = inputRead(i);
             free(old);
@@ -380,8 +386,16 @@ bool sortPoly(polyNode* polyHead)
 void printPoly(polyNode* polyNode)
 {
     polyNode = polyNode->next;
+
     while (polyNode != NULL) {
-        printf("%.6fx^%d", polyNode->coef, polyNode->exp);
+        if (polyNode->coef < 0.0) {
+            printf("\b");
+            printf("\b");
+            printf("- ");
+            printf("%.6fx^%d", fabs(polyNode->coef), polyNode->exp);
+        } else {
+            printf("%.6fx^%d", polyNode->coef, polyNode->exp);
+        }
         if (polyNode->next != NULL) {
             printf(" + ");
         }
@@ -435,6 +449,7 @@ void option3Menu(void)
     printf("==========================================\n");
     printf("  1. A + B\n");
     printf("  2. A - B\n");
+    printf("  3. A * B\n");
     printf("==========================================\n");
     printf("  Enter your choice: ");
 }
@@ -503,4 +518,47 @@ void polyOperation(polyNode* polyHeadA, polyNode* polyHeadB, int isSubtraction)
     }
 
     polyHeadB->next = NULL;
+}
+void polyMul(polyNode* polyHeadA, polyNode* polyHeadB)
+{
+    polyNode* resultHead = initPoly();
+    polyNode* currentA = polyHeadA->next;
+    polyNode* currentB;
+
+    while (currentA != NULL) {
+        currentB = polyHeadB->next;
+        while (currentB != NULL) {
+            polyNode* newNode = (polyNode*)malloc(sizeof(polyNode));
+            if (newNode == NULL) {
+                fprintf(stderr, "INSUFFICIENT MEMORY!\n");
+                exit(0);
+            }
+
+            newNode->coef = currentA->coef * currentB->coef;
+            newNode->exp = currentA->exp + currentB->exp;
+            newNode->next = NULL;
+
+            polyNode* existingNode = findExponent(resultHead, 0, newNode->exp);
+            if (existingNode != NULL) {
+                existingNode->coef += newNode->coef;
+                if (fabs(existingNode->coef) < EPSILON) {
+                    deleteZeroCoef(resultHead);
+                }
+                free(newNode);
+            } else {
+                polyNode* lastNode = resultHead;
+                while (lastNode->next != NULL) {
+                    lastNode = lastNode->next;
+                }
+                lastNode->next = newNode;
+            }
+
+            currentB = currentB->next;
+        }
+        currentA = currentA->next;
+    }
+
+    printPoly(resultHead);
+    sortPoly(resultHead);
+    deletePolyList(resultHead);
 }
