@@ -1,0 +1,3 @@
+/Users/qi7876/projects/DSA/hw/hw03/JPEGCompressor/build/CMakeFiles/JPEGCompressor.dir
+/Users/qi7876/projects/DSA/hw/hw03/JPEGCompressor/build/CMakeFiles/edit_cache.dir
+/Users/qi7876/projects/DSA/hw/hw03/JPEGCompressor/build/CMakeFiles/rebuild_cache.dir
